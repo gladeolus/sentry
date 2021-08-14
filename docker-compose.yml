@@ -1,0 +1,30 @@
+version: '2'
+
+x-sentry: &sentry
+  image: sentry:9.1.2
+  env_file: .dockerenv
+  restart: always
+
+services:
+  redis:
+    image: redis
+
+  postgres:
+    image: postgres:13-alpine
+    env_file: .dockerenv
+    restart: always
+    volumes:
+     - ./volumes/db:/var/lib/postgresql/data
+
+  sentry:
+    ports:
+     - 9000:9000
+    << : *sentry
+
+  cron:
+    command: "sentry run cron"
+    << : *sentry
+    
+  worker:
+    command: "sentry run worker"
+    << : *sentry
