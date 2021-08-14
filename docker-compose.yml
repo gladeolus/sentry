@@ -16,6 +16,9 @@ services:
     volumes:
      - ./volumes/db:/var/lib/postgresql/data
 
+  memcached:
+    image: memcached:1.6.9-alpine
+
   sentry:
     ports:
      - 9000:9000
